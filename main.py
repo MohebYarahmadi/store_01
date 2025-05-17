@@ -20,11 +20,8 @@ class Item:
             return False
 
     def in_stock(self):
-        availability = df.loc[df['id'] == self.item_id, 'in stock'].squeeze()
-        if availability > 0:
-            return True
-        else:
-            return False
+        number = df.loc[df['id'] == self.item_id, 'in stock'].squeeze()
+        return number
 
     def sold(self):
         df.loc[df['id'] == self.item_id, 'in stock'] -= 1
@@ -46,7 +43,7 @@ class Invoice:
         pdf.cell(w=50, h=8, txt=f"Item: {self.item.name}", ln=1)
 
         pdf.set_font(family="Times", size=16, style="B")
-        pdf.cell(w=50, h=8, txt=f"Price: {self.item.price}", ln=1)
+        pdf.cell(w=50, h=8, txt=f"Price: ${self.item.price}", ln=1)
 
         pdf.output("receipt.pdf")
 
@@ -61,7 +58,7 @@ def main():
             invoice.generate()
             item.sold()
         else:
-            print('Not in stock.')
+            print('Not enough in stock.')
     else:
         print('Item not founded!')
 
